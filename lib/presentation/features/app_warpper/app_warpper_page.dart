@@ -12,6 +12,7 @@ class AppWrapperPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AutoTabsScaffold(
+      extendBody: true,
       routes: const [
         HomeRoute(),
         FavoriteRoute(),
