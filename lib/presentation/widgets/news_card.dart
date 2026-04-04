@@ -20,7 +20,7 @@ class NewsCard extends StatelessWidget {
   static const double _contentHorizontalPadding = 12;
   static const double _contentVerticalPadding = 6;
   static const double _titleSubtitleSpacing = 6;
-  static const int _textMaxLines = 2;
+  static const int _textMaxLines = 1;
 
   final String title;
   final String subtitle;

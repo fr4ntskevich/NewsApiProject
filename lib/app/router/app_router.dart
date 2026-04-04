@@ -1,6 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:news_api_project/presentation/features/favorite/favorite_page.dart';
-import 'package:news_api_project/presentation/features/home/home_page.dart';
+import 'package:news_api_project/presentation/features/home/presentation/home_page.dart';
 import 'package:news_api_project/presentation/features/news_details/news_details_page.dart';
 import 'package:news_api_project/presentation/features/app_warpper/app_warpper_page.dart';
 
