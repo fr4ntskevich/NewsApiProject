@@ -44,3 +44,4 @@ flutter:
 
   assets:
     - assets/svg/
+    - assets/svg/nav_bar_tabs/

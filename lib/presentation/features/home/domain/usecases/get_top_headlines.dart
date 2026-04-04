@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:news_api_project/app/error/failures.dart';
 import 'package:news_api_project/presentation/features/home/domain/entities/article.dart';
+import 'package:news_api_project/presentation/features/home/domain/entities/news_category.dart';
 import 'package:news_api_project/presentation/features/home/domain/repositories/news_repository.dart';
 
 class GetTopHeadlines {
@@ -16,6 +17,7 @@ class GetTopHeadlines {
       page: params.page,
       pageSize: params.pageSize,
       country: params.country,
+      category: params.category,
     );
   }
 }
@@ -25,12 +27,14 @@ class GetTopHeadlinesParams extends Equatable {
     required this.page,
     required this.pageSize,
     this.country = 'us',
+    this.category,
   });
 
   final int page;
   final int pageSize;
   final String country;
+  final NewsCategory? category;
 
   @override
-  List<Object> get props => [page, pageSize, country];
+  List<Object?> get props => [page, pageSize, country, category];
 }

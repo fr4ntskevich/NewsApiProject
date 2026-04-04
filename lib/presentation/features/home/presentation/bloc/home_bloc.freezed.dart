@@ -55,12 +55,13 @@ extension HomeEventPatterns on HomeEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _HomeFetched value)?  fetched,TResult Function( _HomeLoadMore value)?  loadMore,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _HomeFetched value)?  fetched,TResult Function( _HomeLoadMore value)?  loadMore,TResult Function( _HomeCategoryChanged value)?  categoryChanged,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _HomeFetched() when fetched != null:
 return fetched(_that);case _HomeLoadMore() when loadMore != null:
-return loadMore(_that);case _:
+return loadMore(_that);case _HomeCategoryChanged() when categoryChanged != null:
+return categoryChanged(_that);case _:
   return orElse();
 
 }
@@ -78,12 +79,13 @@ return loadMore(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _HomeFetched value)  fetched,required TResult Function( _HomeLoadMore value)  loadMore,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _HomeFetched value)  fetched,required TResult Function( _HomeLoadMore value)  loadMore,required TResult Function( _HomeCategoryChanged value)  categoryChanged,}){
 final _that = this;
 switch (_that) {
 case _HomeFetched():
 return fetched(_that);case _HomeLoadMore():
-return loadMore(_that);case _:
+return loadMore(_that);case _HomeCategoryChanged():
+return categoryChanged(_that);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -100,12 +102,13 @@ return loadMore(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _HomeFetched value)?  fetched,TResult? Function( _HomeLoadMore value)?  loadMore,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _HomeFetched value)?  fetched,TResult? Function( _HomeLoadMore value)?  loadMore,TResult? Function( _HomeCategoryChanged value)?  categoryChanged,}){
 final _that = this;
 switch (_that) {
 case _HomeFetched() when fetched != null:
 return fetched(_that);case _HomeLoadMore() when loadMore != null:
-return loadMore(_that);case _:
+return loadMore(_that);case _HomeCategoryChanged() when categoryChanged != null:
+return categoryChanged(_that);case _:
   return null;
 
 }
@@ -122,11 +125,12 @@ return loadMore(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  fetched,TResult Function()?  loadMore,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  fetched,TResult Function()?  loadMore,TResult Function( NewsCategory category)?  categoryChanged,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _HomeFetched() when fetched != null:
 return fetched();case _HomeLoadMore() when loadMore != null:
-return loadMore();case _:
+return loadMore();case _HomeCategoryChanged() when categoryChanged != null:
+return categoryChanged(_that.category);case _:
   return orElse();
 
 }
@@ -144,11 +148,12 @@ return loadMore();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  fetched,required TResult Function()  loadMore,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  fetched,required TResult Function()  loadMore,required TResult Function( NewsCategory category)  categoryChanged,}) {final _that = this;
 switch (_that) {
 case _HomeFetched():
 return fetched();case _HomeLoadMore():
-return loadMore();case _:
+return loadMore();case _HomeCategoryChanged():
+return categoryChanged(_that.category);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -165,11 +170,12 @@ return loadMore();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  fetched,TResult? Function()?  loadMore,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  fetched,TResult? Function()?  loadMore,TResult? Function( NewsCategory category)?  categoryChanged,}) {final _that = this;
 switch (_that) {
 case _HomeFetched() when fetched != null:
 return fetched();case _HomeLoadMore() when loadMore != null:
-return loadMore();case _:
+return loadMore();case _HomeCategoryChanged() when categoryChanged != null:
+return categoryChanged(_that.category);case _:
   return null;
 
 }
@@ -240,6 +246,72 @@ String toString() {
 
 
 
+
+/// @nodoc
+
+
+class _HomeCategoryChanged implements HomeEvent {
+  const _HomeCategoryChanged(this.category);
+  
+
+ final  NewsCategory category;
+
+/// Create a copy of HomeEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$HomeCategoryChangedCopyWith<_HomeCategoryChanged> get copyWith => __$HomeCategoryChangedCopyWithImpl<_HomeCategoryChanged>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _HomeCategoryChanged&&(identical(other.category, category) || other.category == category));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,category);
+
+@override
+String toString() {
+  return 'HomeEvent.categoryChanged(category: $category)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$HomeCategoryChangedCopyWith<$Res> implements $HomeEventCopyWith<$Res> {
+  factory _$HomeCategoryChangedCopyWith(_HomeCategoryChanged value, $Res Function(_HomeCategoryChanged) _then) = __$HomeCategoryChangedCopyWithImpl;
+@useResult
+$Res call({
+ NewsCategory category
+});
+
+
+
+
+}
+/// @nodoc
+class __$HomeCategoryChangedCopyWithImpl<$Res>
+    implements _$HomeCategoryChangedCopyWith<$Res> {
+  __$HomeCategoryChangedCopyWithImpl(this._self, this._then);
+
+  final _HomeCategoryChanged _self;
+  final $Res Function(_HomeCategoryChanged) _then;
+
+/// Create a copy of HomeEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? category = null,}) {
+  return _then(_HomeCategoryChanged(
+null == category ? _self.category : category // ignore: cast_nullable_to_non_nullable
+as NewsCategory,
+  ));
+}
+
+
+}
 
 /// @nodoc
 mixin _$HomeState {

@@ -15,5 +15,8 @@ class AppTheme {
     brightness: Brightness.light,
     fontFamily: _fontFamily,
     textTheme: textTheme.apply(fontFamily: _fontFamily),
+    appBarTheme: AppBarTheme(
+      backgroundColor: _lightColors.white,
+    )
   );
 }

@@ -8,6 +8,7 @@ abstract class NewsRemoteDataSource {
     required int page,
     required int pageSize,
     String country = 'us',
+    String? category,
   });
 }
 
@@ -21,15 +22,19 @@ class NewsRemoteDataSourceImpl implements NewsRemoteDataSource {
     required int page,
     required int pageSize,
     String country = 'us',
+    String? category,
   }) async {
     try {
+      final queryParams = <String, dynamic>{
+        'country': country,
+        'pageSize': pageSize,
+        'page': page,
+      };
+      if (category != null) queryParams['category'] = category;
+
       final response = await apiClient.dio.get(
         'top-headlines',
-        queryParameters: {
-          'country': country,
-          'pageSize': pageSize,
-          'page': page,
-        },
+        queryParameters: queryParams,
       );
       final data = response.data as Map<String, dynamic>;
       if (data['status'] != 'ok') {

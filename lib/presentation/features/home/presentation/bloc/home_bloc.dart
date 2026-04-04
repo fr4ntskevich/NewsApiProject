@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:news_api_project/app/error/failures.dart';
 import 'package:news_api_project/presentation/features/home/domain/entities/article.dart';
+import 'package:news_api_project/presentation/features/home/domain/entities/news_category.dart';
 import 'package:news_api_project/presentation/features/home/domain/usecases/get_top_headlines.dart';
 
 part 'home_bloc.freezed.dart';
@@ -15,16 +16,20 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         super(const HomeState.initial()) {
     on<_HomeFetched>(_onFetched);
     on<_HomeLoadMore>(_onLoadMore);
+    on<_HomeCategoryChanged>(_onCategoryChanged);
   }
 
   final GetTopHeadlines _getTopHeadlines;
 
   static const int _pageSize = 10;
+  NewsCategory _selectedCategory = NewsCategory.general;
+
+  NewsCategory get selectedCategory => _selectedCategory;
 
   Future<void> _onFetched(_HomeFetched event, Emitter<HomeState> emit) async {
     emit(const HomeState.loading());
     final result = await _getTopHeadlines(
-      const GetTopHeadlinesParams(page: 1, pageSize: _pageSize),
+      GetTopHeadlinesParams(page: 1, pageSize: _pageSize, category: _selectedCategory),
     );
     result.fold(
       (failure) => emit(HomeState.error(failure: failure)),
@@ -48,7 +53,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
     final nextPage = current.page + 1;
     final result = await _getTopHeadlines(
-      GetTopHeadlinesParams(page: nextPage, pageSize: _pageSize),
+      GetTopHeadlinesParams(page: nextPage, pageSize: _pageSize, category: _selectedCategory),
     );
     result.fold(
       (failure) => emit(HomeState.loaded(
@@ -63,6 +68,22 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           totalResults: totalResults,
           page: nextPage,
         ));
+      },
+    );
+  }
+
+  Future<void> _onCategoryChanged(_HomeCategoryChanged event, Emitter<HomeState> emit) async {
+    if (_selectedCategory == event.category) return;
+    _selectedCategory = event.category;
+    emit(const HomeState.loading());
+    final result = await _getTopHeadlines(
+      GetTopHeadlinesParams(page: 1, pageSize: _pageSize, category: _selectedCategory),
+    );
+    result.fold(
+      (failure) => emit(HomeState.error(failure: failure)),
+      (data) {
+        final (articles, totalResults) = data;
+        emit(HomeState.loaded(articles: articles, totalResults: totalResults, page: 1));
       },
     );
   }
