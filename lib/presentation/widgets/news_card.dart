@@ -19,7 +19,6 @@ class NewsCard extends StatelessWidget {
   static const double _shadowBlurRadius = 6.1;
   static const double _contentHorizontalPadding = 12;
   static const double _contentVerticalPadding = 6;
-  static const double _titleSubtitleSpacing = 6;
   static const int _textMaxLines = 1;
 
   final String title;
@@ -69,7 +68,6 @@ class NewsCard extends StatelessWidget {
                       maxLines: _textMaxLines,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    const SizedBox(height: _titleSubtitleSpacing),
                     Text(
                       subtitle,
                       style: AppFonts.reg19,

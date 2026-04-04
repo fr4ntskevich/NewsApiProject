@@ -116,8 +116,8 @@ class _CategoryChipBar extends StatelessWidget {
     required this.onCategorySelected,
   });
 
-  static const double _height = 56;
-  static const double _chipSpacing = 8;
+  static const double _height = 60;
+  static const double _chipSpacing = 7;
   static const EdgeInsets _padding = EdgeInsets.symmetric(horizontal: 16, vertical: 8);
 
   final List<NewsCategory> categories;

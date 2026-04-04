@@ -10,9 +10,8 @@ class NewsCategoryChip extends StatelessWidget {
     this.onTap,
   });
 
+  static const double _width = 114;
   static const double _borderRadius = 22;
-  static const double _verticalPadding = 10;
-  static const double _horizontalPadding = 20;
 
   final String label;
   final bool isActive;
@@ -23,15 +22,12 @@ class NewsCategoryChip extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
+        width: _width,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(_borderRadius),
           color: isActive ? context.colors.blue : context.colors.greyLight,
         ),
-        child: Padding(
-          padding: EdgeInsetsGeometry.symmetric(
-            vertical: _verticalPadding,
-            horizontal: _horizontalPadding,
-          ),
+        child: Center(
           child: Text(
             label,
             style: AppFonts.reg17.copyWith(
