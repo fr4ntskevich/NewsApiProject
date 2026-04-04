@@ -1,0 +1,23 @@
+{
+  "@@locale": "en",
+
+  "errorServer": "Server error occurred",
+  "@errorServer": {
+    "description": "Generic server error message"
+  },
+
+  "errorCache": "Cache error occurred",
+  "@errorCache": {
+    "description": "Generic cache error message"
+  },
+
+  "errorNetwork": "Network error occurred",
+  "@errorNetwork": {
+    "description": "Generic network error message"
+  },
+
+  "errorValidation": "Validation failed",
+  "@errorValidation": {
+    "description": "Generic validation error message"
+  }
+}
