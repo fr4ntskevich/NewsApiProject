@@ -12,6 +12,8 @@ sealed class AppColors {
   Color get greyLight;
   Color get grey;
   Color get blue;
+  Color get shadow;
+  Color get border;
 }
 
 class LightColors implements AppColors {
@@ -31,6 +33,12 @@ class LightColors implements AppColors {
 
   @override
   Color get blue => const Color(0xFF2F78FF);
+
+  @override
+  Color get shadow => const Color(0x26000000);
+
+  @override
+  Color get border => const Color(0xFFCECECE);
 }
 
 class DarkColors extends LightColors {
