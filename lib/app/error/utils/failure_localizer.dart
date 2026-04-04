@@ -1,5 +1,5 @@
-import 'package:news_api_project/core/error/failures.dart';
-import 'package:news_api_project/l10n/app_localizations.dart';
+import 'package:news_api_project/app/error/failures.dart';
+import 'package:news_api_project/app/l10n/app_localizations.dart';
 
 extension FailureLocalizer on Failure {
   String localizedMessage(AppLocalizations l10n) => switch (this) {

@@ -23,3 +23,8 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   generate: true
+
+  fonts:
+    - family: Satoshi
+      fonts:
+        - asset: assets/font/Satoshi-Variable.ttf
