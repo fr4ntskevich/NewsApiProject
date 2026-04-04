@@ -1,8 +1,8 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:news_api_project/presentation/features/pages/favorite/favorite_page.dart';
-import 'package:news_api_project/presentation/features/pages/home/home_page.dart';
-import 'package:news_api_project/presentation/features/pages/news_details/news_details_page.dart';
-import 'package:news_api_project/presentation/features/pages/app_warpper/app_warpper_page.dart';
+import 'package:news_api_project/presentation/features/favorite/favorite_page.dart';
+import 'package:news_api_project/presentation/features/home/home_page.dart';
+import 'package:news_api_project/presentation/features/news_details/news_details_page.dart';
+import 'package:news_api_project/presentation/features/app_warpper/app_warpper_page.dart';
 
 part 'app_router.gr.dart';
 
