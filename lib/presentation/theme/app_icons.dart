@@ -4,4 +4,5 @@ class AppIcons {
   static const String search = 'assets/svg/search.svg';
   static const String starFilled = 'assets/svg/star_filled.svg';
   static const String starOutlined = 'assets/svg/star_outlined.svg';
+  static const String arrowBack = 'assets/svg/arrow_back.svg';
 }

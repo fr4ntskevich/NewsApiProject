@@ -27,49 +27,80 @@ class AppWrapperRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [FavoritePage]
-class FavoriteRoute extends PageRouteInfo<void> {
-  const FavoriteRoute({List<PageRouteInfo>? children})
-    : super(FavoriteRoute.name, initialChildren: children);
+/// [ArticleDetailsPage]
+class ArticleDetailsRoute extends PageRouteInfo<ArticleDetailsRouteArgs> {
+  ArticleDetailsRoute({
+    Key? key,
+    required Article article,
+    List<PageRouteInfo>? children,
+  }) : super(
+         ArticleDetailsRoute.name,
+         args: ArticleDetailsRouteArgs(key: key, article: article),
+         initialChildren: children,
+       );
 
-  static const String name = 'FavoriteRoute';
+  static const String name = 'ArticleDetailsRoute';
 
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      return const FavoritePage();
+      final args = data.argsAs<ArticleDetailsRouteArgs>();
+      return ArticleDetailsPage(key: args.key, article: args.article);
+    },
+  );
+}
+
+class ArticleDetailsRouteArgs {
+  const ArticleDetailsRouteArgs({this.key, required this.article});
+
+  final Key? key;
+
+  final Article article;
+
+  @override
+  String toString() {
+    return 'ArticleDetailsRouteArgs{key: $key, article: $article}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! ArticleDetailsRouteArgs) return false;
+    return key == other.key && article == other.article;
+  }
+
+  @override
+  int get hashCode => key.hashCode ^ article.hashCode;
+}
+
+/// generated route for
+/// [ArticlesPage]
+class ArticlesRoute extends PageRouteInfo<void> {
+  const ArticlesRoute({List<PageRouteInfo>? children})
+    : super(ArticlesRoute.name, initialChildren: children);
+
+  static const String name = 'ArticlesRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const ArticlesPage();
     },
   );
 }
 
 /// generated route for
-/// [HomePage]
-class HomeRoute extends PageRouteInfo<void> {
-  const HomeRoute({List<PageRouteInfo>? children})
-    : super(HomeRoute.name, initialChildren: children);
+/// [FavoritesPage]
+class FavoritesRoute extends PageRouteInfo<void> {
+  const FavoritesRoute({List<PageRouteInfo>? children})
+    : super(FavoritesRoute.name, initialChildren: children);
 
-  static const String name = 'HomeRoute';
-
-  static PageInfo page = PageInfo(
-    name,
-    builder: (data) {
-      return const HomePage();
-    },
-  );
-}
-
-/// generated route for
-/// [NewsDetailsPage]
-class NewsDetailsRoute extends PageRouteInfo<void> {
-  const NewsDetailsRoute({List<PageRouteInfo>? children})
-    : super(NewsDetailsRoute.name, initialChildren: children);
-
-  static const String name = 'NewsDetailsRoute';
+  static const String name = 'FavoritesRoute';
 
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      return const NewsDetailsPage();
+      return const FavoritesPage();
     },
   );
 }
