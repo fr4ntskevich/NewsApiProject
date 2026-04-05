@@ -2,7 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:news_api_project/core/domain/article.dart';
 import 'package:news_api_project/features/favorites/presentation/pages/favorite_page.dart';
-import 'package:news_api_project/features/articles/presentation/pages/home_page.dart';
+import 'package:news_api_project/features/articles/presentation/pages/articles_page.dart';
 import 'package:news_api_project/features/articles/presentation/pages/article_details_page.dart';
 import 'package:news_api_project/app/router/app_wrapper_page.dart';
 

@@ -66,6 +66,7 @@ class _ArticlesViewState extends State<_ArticlesView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        scrolledUnderElevation: 0,
         leading: IconButton(
           padding: EdgeInsets.only(left: _searchIconPadding),
           onPressed: context.router.maybePop,
