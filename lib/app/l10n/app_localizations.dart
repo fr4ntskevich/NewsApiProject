@@ -114,6 +114,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Validation failed'**
   String get errorValidation;
+
+  /// HTTP 400 bad request error message
+  ///
+  /// In en, this message translates to:
+  /// **'The request was invalid. Please check your input and try again.'**
+  String get errorBadRequest;
+
+  /// HTTP 401 unauthorized error message
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid or missing API key. Please check your configuration.'**
+  String get errorUnauthorized;
+
+  /// HTTP 429 rate limit error message
+  ///
+  /// In en, this message translates to:
+  /// **'Too many requests. Please wait a moment and try again.'**
+  String get errorRateLimit;
+
+  /// Empty state message on the favorites page
+  ///
+  /// In en, this message translates to:
+  /// **'No favorites yet'**
+  String get noFavoritesYet;
+
+  /// Hint text for the articles search field
+  ///
+  /// In en, this message translates to:
+  /// **'Search articles…'**
+  String get searchArticlesHint;
+
+  /// Label for retry button on error screens
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get retry;
+
+  /// General news category label
+  ///
+  /// In en, this message translates to:
+  /// **'General'**
+  String get categoryGeneral;
+
+  /// Business news category label
+  ///
+  /// In en, this message translates to:
+  /// **'Business'**
+  String get categoryBusiness;
+
+  /// Entertainment news category label
+  ///
+  /// In en, this message translates to:
+  /// **'Entertainment'**
+  String get categoryEntertainment;
+
+  /// Health news category label
+  ///
+  /// In en, this message translates to:
+  /// **'Health'**
+  String get categoryHealth;
+
+  /// Science news category label
+  ///
+  /// In en, this message translates to:
+  /// **'Science'**
+  String get categoryScience;
+
+  /// Sports news category label
+  ///
+  /// In en, this message translates to:
+  /// **'Sports'**
+  String get categorySports;
+
+  /// Technology news category label
+  ///
+  /// In en, this message translates to:
+  /// **'Technology'**
+  String get categoryTechnology;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

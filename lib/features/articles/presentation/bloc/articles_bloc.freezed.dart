@@ -55,13 +55,14 @@ extension ArticlesEventPatterns on ArticlesEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _ArticlesFetched value)?  fetched,TResult Function( _ArticlesLoadMore value)?  loadMore,TResult Function( _ArticlesCategoryChanged value)?  categoryChanged,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _ArticlesFetched value)?  fetched,TResult Function( _ArticlesLoadMore value)?  loadMore,TResult Function( _ArticlesCategoryChanged value)?  categoryChanged,TResult Function( _ArticlesSearched value)?  searched,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _ArticlesFetched() when fetched != null:
 return fetched(_that);case _ArticlesLoadMore() when loadMore != null:
 return loadMore(_that);case _ArticlesCategoryChanged() when categoryChanged != null:
-return categoryChanged(_that);case _:
+return categoryChanged(_that);case _ArticlesSearched() when searched != null:
+return searched(_that);case _:
   return orElse();
 
 }
@@ -79,13 +80,14 @@ return categoryChanged(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _ArticlesFetched value)  fetched,required TResult Function( _ArticlesLoadMore value)  loadMore,required TResult Function( _ArticlesCategoryChanged value)  categoryChanged,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _ArticlesFetched value)  fetched,required TResult Function( _ArticlesLoadMore value)  loadMore,required TResult Function( _ArticlesCategoryChanged value)  categoryChanged,required TResult Function( _ArticlesSearched value)  searched,}){
 final _that = this;
 switch (_that) {
 case _ArticlesFetched():
 return fetched(_that);case _ArticlesLoadMore():
 return loadMore(_that);case _ArticlesCategoryChanged():
-return categoryChanged(_that);case _:
+return categoryChanged(_that);case _ArticlesSearched():
+return searched(_that);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -102,13 +104,14 @@ return categoryChanged(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _ArticlesFetched value)?  fetched,TResult? Function( _ArticlesLoadMore value)?  loadMore,TResult? Function( _ArticlesCategoryChanged value)?  categoryChanged,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _ArticlesFetched value)?  fetched,TResult? Function( _ArticlesLoadMore value)?  loadMore,TResult? Function( _ArticlesCategoryChanged value)?  categoryChanged,TResult? Function( _ArticlesSearched value)?  searched,}){
 final _that = this;
 switch (_that) {
 case _ArticlesFetched() when fetched != null:
 return fetched(_that);case _ArticlesLoadMore() when loadMore != null:
 return loadMore(_that);case _ArticlesCategoryChanged() when categoryChanged != null:
-return categoryChanged(_that);case _:
+return categoryChanged(_that);case _ArticlesSearched() when searched != null:
+return searched(_that);case _:
   return null;
 
 }
@@ -125,12 +128,13 @@ return categoryChanged(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  fetched,TResult Function()?  loadMore,TResult Function( ArticlesCategory category)?  categoryChanged,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  fetched,TResult Function()?  loadMore,TResult Function( ArticlesCategory category)?  categoryChanged,TResult Function( String query)?  searched,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ArticlesFetched() when fetched != null:
 return fetched();case _ArticlesLoadMore() when loadMore != null:
 return loadMore();case _ArticlesCategoryChanged() when categoryChanged != null:
-return categoryChanged(_that.category);case _:
+return categoryChanged(_that.category);case _ArticlesSearched() when searched != null:
+return searched(_that.query);case _:
   return orElse();
 
 }
@@ -148,12 +152,13 @@ return categoryChanged(_that.category);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  fetched,required TResult Function()  loadMore,required TResult Function( ArticlesCategory category)  categoryChanged,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  fetched,required TResult Function()  loadMore,required TResult Function( ArticlesCategory category)  categoryChanged,required TResult Function( String query)  searched,}) {final _that = this;
 switch (_that) {
 case _ArticlesFetched():
 return fetched();case _ArticlesLoadMore():
 return loadMore();case _ArticlesCategoryChanged():
-return categoryChanged(_that.category);case _:
+return categoryChanged(_that.category);case _ArticlesSearched():
+return searched(_that.query);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -170,12 +175,13 @@ return categoryChanged(_that.category);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  fetched,TResult? Function()?  loadMore,TResult? Function( ArticlesCategory category)?  categoryChanged,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  fetched,TResult? Function()?  loadMore,TResult? Function( ArticlesCategory category)?  categoryChanged,TResult? Function( String query)?  searched,}) {final _that = this;
 switch (_that) {
 case _ArticlesFetched() when fetched != null:
 return fetched();case _ArticlesLoadMore() when loadMore != null:
 return loadMore();case _ArticlesCategoryChanged() when categoryChanged != null:
-return categoryChanged(_that.category);case _:
+return categoryChanged(_that.category);case _ArticlesSearched() when searched != null:
+return searched(_that.query);case _:
   return null;
 
 }
@@ -307,6 +313,72 @@ class __$ArticlesCategoryChangedCopyWithImpl<$Res>
   return _then(_ArticlesCategoryChanged(
 null == category ? _self.category : category // ignore: cast_nullable_to_non_nullable
 as ArticlesCategory,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class _ArticlesSearched implements ArticlesEvent {
+  const _ArticlesSearched(this.query);
+  
+
+ final  String query;
+
+/// Create a copy of ArticlesEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$ArticlesSearchedCopyWith<_ArticlesSearched> get copyWith => __$ArticlesSearchedCopyWithImpl<_ArticlesSearched>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ArticlesSearched&&(identical(other.query, query) || other.query == query));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,query);
+
+@override
+String toString() {
+  return 'ArticlesEvent.searched(query: $query)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$ArticlesSearchedCopyWith<$Res> implements $ArticlesEventCopyWith<$Res> {
+  factory _$ArticlesSearchedCopyWith(_ArticlesSearched value, $Res Function(_ArticlesSearched) _then) = __$ArticlesSearchedCopyWithImpl;
+@useResult
+$Res call({
+ String query
+});
+
+
+
+
+}
+/// @nodoc
+class __$ArticlesSearchedCopyWithImpl<$Res>
+    implements _$ArticlesSearchedCopyWith<$Res> {
+  __$ArticlesSearchedCopyWithImpl(this._self, this._then);
+
+  final _ArticlesSearched _self;
+  final $Res Function(_ArticlesSearched) _then;
+
+/// Create a copy of ArticlesEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? query = null,}) {
+  return _then(_ArticlesSearched(
+null == query ? _self.query : query // ignore: cast_nullable_to_non_nullable
+as String,
   ));
 }
 

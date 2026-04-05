@@ -9,5 +9,6 @@ abstract class ArticlesRepository {
     required int pageSize,
     String country = 'us',
     ArticlesCategory? category,
+    String? query,
   });
 }

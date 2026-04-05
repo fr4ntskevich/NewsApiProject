@@ -17,19 +17,24 @@ class ArticlesBloc extends Bloc<ArticlesEvent, ArticlesState> {
     on<_ArticlesFetched>(_onFetched);
     on<_ArticlesLoadMore>(_onLoadMore);
     on<_ArticlesCategoryChanged>(_onCategoryChanged);
+    on<_ArticlesSearched>(_onSearched);
   }
 
   final GetTopHeadlines _getTopHeadlines;
 
   static const int _pageSize = 10;
   ArticlesCategory _selectedCategory = ArticlesCategory.general;
-
-  ArticlesCategory get selectedCategory => _selectedCategory;
+  String? _searchQuery;
 
   Future<void> _onFetched(_ArticlesFetched event, Emitter<ArticlesState> emit) async {
     emit(const ArticlesState.loading());
     final result = await _getTopHeadlines(
-      GetTopHeadlinesParams(page: 1, pageSize: _pageSize, category: _selectedCategory),
+      GetTopHeadlinesParams(
+        page: 1,
+        pageSize: _pageSize,
+        category: _selectedCategory,
+        query: _searchQuery,
+      ),
     );
     result.fold(
       (failure) => emit(ArticlesState.error(failure: failure)),
@@ -53,7 +58,12 @@ class ArticlesBloc extends Bloc<ArticlesEvent, ArticlesState> {
 
     final nextPage = current.page + 1;
     final result = await _getTopHeadlines(
-      GetTopHeadlinesParams(page: nextPage, pageSize: _pageSize, category: _selectedCategory),
+      GetTopHeadlinesParams(
+        page: nextPage,
+        pageSize: _pageSize,
+        category: _selectedCategory,
+        query: _searchQuery,
+      ),
     );
     result.fold(
       (failure) => emit(ArticlesState.loaded(
@@ -77,7 +87,35 @@ class ArticlesBloc extends Bloc<ArticlesEvent, ArticlesState> {
     _selectedCategory = event.category;
     emit(const ArticlesState.loading());
     final result = await _getTopHeadlines(
-      GetTopHeadlinesParams(page: 1, pageSize: _pageSize, category: _selectedCategory),
+      GetTopHeadlinesParams(
+        page: 1,
+        pageSize: _pageSize,
+        category: _selectedCategory,
+        query: _searchQuery,
+      ),
+    );
+    result.fold(
+      (failure) => emit(ArticlesState.error(failure: failure)),
+      (data) {
+        final (articles, totalResults) = data;
+        emit(ArticlesState.loaded(articles: articles, totalResults: totalResults, page: 1));
+      },
+    );
+  }
+
+  Future<void> _onSearched(_ArticlesSearched event, Emitter<ArticlesState> emit) async {
+    final query = event.query.trim();
+    final normalizedQuery = query.isEmpty ? null : query;
+    if (normalizedQuery == _searchQuery) return;
+    _searchQuery = normalizedQuery;
+    emit(const ArticlesState.loading());
+    final result = await _getTopHeadlines(
+      GetTopHeadlinesParams(
+        page: 1,
+        pageSize: _pageSize,
+        category: _selectedCategory,
+        query: _searchQuery,
+      ),
     );
     result.fold(
       (failure) => emit(ArticlesState.error(failure: failure)),

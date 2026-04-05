@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:news_api_project/presentation/theme/app_fonts.dart';
 import 'package:news_api_project/presentation/theme/app_icons.dart';
+import 'package:news_api_project/presentation/theme/app_shadows.dart';
 import 'package:news_api_project/presentation/theme/utils/colors_utils.dart';
 
 class ArticleCard extends StatelessWidget {
@@ -19,8 +20,6 @@ class ArticleCard extends StatelessWidget {
 
   static const double _borderRadius = 12;
   static const double _borderWidth = 0.5;
-  static const Offset _shadowOffset = Offset(0, 3);
-  static const double _shadowBlurRadius = 6.1;
   static const double _contentHorizontalPadding = 10;
   static const double _contentVerticalPadding = 5;
   static const int _textMaxLines = 1;
@@ -50,11 +49,7 @@ class ArticleCard extends StatelessWidget {
             width: _borderWidth,
           ),
           boxShadow: [
-            BoxShadow(
-              color: context.colors.shadow,
-              offset: _shadowOffset,
-              blurRadius: _shadowBlurRadius,
-            ),
+            AppShadows.card(context.colors.shadow),
           ],
         ),
         child: Row(

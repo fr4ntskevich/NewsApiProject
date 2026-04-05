@@ -3,13 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
+import 'package:news_api_project/app/error/failures.dart';
+import 'package:news_api_project/app/error/utils/failure_localizer.dart';
+import 'package:news_api_project/app/l10n/app_localizations.dart';
+import 'package:news_api_project/app/l10n/utils/l10n_utils.dart';
 import 'package:news_api_project/app/router/app_router.dart';
 import 'package:news_api_project/app/di/injection_container.dart';
 import 'package:news_api_project/features/articles/domain/entities/articles_category.dart';
 import 'package:news_api_project/features/articles/presentation/bloc/articles_bloc.dart';
 import 'package:news_api_project/core/domain/article.dart';
 import 'package:news_api_project/features/articles/presentation/widgets/news_category_chip.dart';
+import 'package:news_api_project/presentation/theme/app_fonts.dart';
 import 'package:news_api_project/presentation/theme/app_icons.dart';
+import 'package:news_api_project/presentation/theme/utils/colors_utils.dart';
 import 'package:news_api_project/presentation/widgets/article_card.dart';
 
 @RoutePage()
@@ -34,9 +40,16 @@ class _ArticlesView extends StatefulWidget {
 
 class _ArticlesViewState extends State<_ArticlesView> {
   static const double _scrollThreshold = 200;
+  static const double _searchIconPadding = 13;
+  static const double _chipBarHeight = 70;
+  static const double _closeSearchIconSize = 30;
 
   final ScrollController _scrollController = ScrollController();
+  final TextEditingController _searchController = TextEditingController();
+  final FocusNode _searchFocusNode = FocusNode();
+
   ArticlesCategory _selectedCategory = ArticlesCategory.general;
+  bool _isSearching = false;
 
   @override
   void initState() {
@@ -49,6 +62,8 @@ class _ArticlesViewState extends State<_ArticlesView> {
     _scrollController
       ..removeListener(_onScroll)
       ..dispose();
+    _searchController.dispose();
+    _searchFocusNode.dispose();
     super.dispose();
   }
 
@@ -59,8 +74,26 @@ class _ArticlesViewState extends State<_ArticlesView> {
     }
   }
 
-  static const double _searchIconPadding = 13;
-  static const double _chipBarHeight = 70;
+  void _onSearchIconTapped() {
+    if (_isSearching) {
+      _closeSearch();
+    } else {
+      setState(() => _isSearching = true);
+      _searchFocusNode.requestFocus();
+    }
+  }
+
+  void _closeSearch() {
+    _searchFocusNode.unfocus();
+    _searchController.clear();
+    setState(() => _isSearching = false);
+    context.read<ArticlesBloc>().add(const ArticlesEvent.searched(''));
+  }
+
+  void _onSearchSubmitted(String query) {
+    _searchFocusNode.unfocus();
+    context.read<ArticlesBloc>().add(ArticlesEvent.searched(query));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,10 +101,43 @@ class _ArticlesViewState extends State<_ArticlesView> {
       appBar: AppBar(
         scrolledUnderElevation: 0,
         leading: IconButton(
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
           padding: EdgeInsets.only(left: _searchIconPadding),
-          onPressed: context.router.maybePop,
+          onPressed: _onSearchIconTapped,
           icon: SvgPicture.asset(AppIcons.search),
         ),
+        title: _isSearching
+            ? TextField(
+                controller: _searchController,
+                focusNode: _searchFocusNode,
+                textInputAction: TextInputAction.search,
+                onSubmitted: _onSearchSubmitted,
+                autofocus: true,
+                style: AppFonts.reg17,
+                decoration: InputDecoration(
+                  hintText: context.l10n.searchArticlesHint,
+                  hintStyle: AppFonts.reg17.copyWith(
+                    color: context.colors.greyLight,
+                  ),
+                  border: InputBorder.none,
+                  isDense: true,
+                  contentPadding: EdgeInsets.zero,
+                ),
+              )
+            : null,
+        actions: _isSearching
+            ? [
+                IconButton(
+                  icon: Icon(
+                    Icons.close,
+                    size: _closeSearchIconSize,
+                    color: context.colors.grey,
+                  ),
+                  onPressed: _closeSearch,
+                ),
+              ]
+            : null,
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(_chipBarHeight),
           child: _CategoryChipBar(
@@ -85,6 +151,7 @@ class _ArticlesViewState extends State<_ArticlesView> {
         ),
       ),
       body: BlocBuilder<ArticlesBloc, ArticlesState>(
+        buildWhen: (previous, current) => previous != current,
         builder: (context, state) {
           return state.when(
             initial: () => const Center(child: CircularProgressIndicator()),
@@ -100,7 +167,7 @@ class _ArticlesViewState extends State<_ArticlesView> {
               isLoadingMore: true,
             ),
             error: (failure) => _ErrorView(
-              message: failure.message,
+              failure: failure,
               onRetry: () => context.read<ArticlesBloc>().add(const ArticlesEvent.fetched()),
             ),
           );
@@ -137,7 +204,7 @@ class _CategoryChipBar extends StatelessWidget {
         itemBuilder: (context, index) {
           final category = categories[index];
           return NewsCategoryChip(
-            label: category.name[0].toUpperCase() + category.name.substring(1),
+            label: category.localizedName(context.l10n),
             isActive: selectedCategory == category,
             onTap: () {
               if (selectedCategory == category) return;
@@ -176,10 +243,11 @@ class _ArticleList extends StatelessWidget {
       separatorBuilder: (context, index) => const SizedBox(height: _cardSpacing),
       itemBuilder: (context, index) {
         if (index >= articles.length) {
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         }
         final article = articles[index];
         return ArticleCard(
+          key: ValueKey(article.title),
           title: article.title,
           subtitle: article.subtitle,
           date: _dateFormat.format(article.publishedAt),
@@ -192,33 +260,51 @@ class _ArticleList extends StatelessWidget {
 }
 
 class _ErrorView extends StatelessWidget {
-  const _ErrorView({required this.message, required this.onRetry});
+  const _ErrorView({required this.failure, required this.onRetry});
 
-  final String message;
+  static const double _iconSize = 48;
+  static const double _padding = 24;
+
+  final Failure failure;
   final VoidCallback onRetry;
 
   @override
   Widget build(BuildContext context) {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.all(_padding),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.error_outline, size: 48),
+            const Icon(
+              Icons.error_outline,
+              size: _iconSize,
+            ),
             const SizedBox(height: 16),
             Text(
-              message,
+              failure.localizedMessage(context.l10n),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: onRetry,
-              child: const Text('Retry'),
+              child: Text(context.l10n.retry),
             ),
           ],
         ),
       ),
     );
   }
+}
+
+extension _ArticlesCategoryL10n on ArticlesCategory {
+  String localizedName(AppLocalizations l10n) => switch (this) {
+        ArticlesCategory.general => l10n.categoryGeneral,
+        ArticlesCategory.business => l10n.categoryBusiness,
+        ArticlesCategory.entertainment => l10n.categoryEntertainment,
+        ArticlesCategory.health => l10n.categoryHealth,
+        ArticlesCategory.science => l10n.categoryScience,
+        ArticlesCategory.sports => l10n.categorySports,
+        ArticlesCategory.technology => l10n.categoryTechnology,
+      };
 }

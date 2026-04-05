@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:news_api_project/presentation/theme/app_icons.dart';
+import 'package:news_api_project/presentation/theme/app_shadows.dart';
 import 'package:news_api_project/presentation/theme/utils/colors_utils.dart';
 
 enum RouterTab { home, favorite }
@@ -13,8 +14,6 @@ class NavBar extends StatelessWidget {
 
   static const double _borderRadius = 12;
   static const double _borderWidth = 0.5;
-  static const Offset _shadowOffset = Offset(0, 3);
-  static const double _shadowBlurRadius = 6.1;
   static const double _iconsVerticalPadding = 26;
 
   @override
@@ -28,11 +27,7 @@ class NavBar extends StatelessWidget {
           width: _borderWidth,
         ),
         boxShadow: [
-          BoxShadow(
-            color: context.colors.shadow,
-            offset: _shadowOffset,
-            blurRadius: _shadowBlurRadius,
-          ),
+          AppShadows.card(context.colors.shadow),
         ],
       ),
       child: Padding(

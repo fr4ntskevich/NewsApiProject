@@ -26,6 +26,18 @@ class ValidationFailure extends Failure {
   const ValidationFailure([super.message = 'Validation failed']);
 }
 
+class BadRequestFailure extends Failure {
+  const BadRequestFailure([super.message = 'Bad request']);
+}
+
+class UnauthorizedFailure extends Failure {
+  const UnauthorizedFailure([super.message = 'Unauthorized']);
+}
+
+class RateLimitFailure extends Failure {
+  const RateLimitFailure([super.message = 'Too many requests']);
+}
+
 extension EitherExtensions<L, R> on Either<L, R> {
   R getRight() => (this as Right<L, R>).value;
   L getLeft() => (this as Left<L, R>).value;

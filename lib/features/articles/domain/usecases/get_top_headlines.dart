@@ -18,6 +18,7 @@ class GetTopHeadlines {
       pageSize: params.pageSize,
       country: params.country,
       category: params.category,
+      query: params.query,
     );
   }
 }
@@ -28,13 +29,15 @@ class GetTopHeadlinesParams extends Equatable {
     required this.pageSize,
     this.country = 'us',
     this.category,
+    this.query,
   });
 
   final int page;
   final int pageSize;
   final String country;
   final ArticlesCategory? category;
+  final String? query;
 
   @override
-  List<Object?> get props => [page, pageSize, country, category];
+  List<Object?> get props => [page, pageSize, country, category, query];
 }

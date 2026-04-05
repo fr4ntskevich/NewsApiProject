@@ -2,6 +2,8 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:news_api_project/app/error/utils/failure_localizer.dart';
+import 'package:news_api_project/app/l10n/utils/l10n_utils.dart';
 import 'package:news_api_project/app/router/app_router.dart';
 import 'package:news_api_project/core/domain/article.dart';
 import 'package:news_api_project/features/favorites/presentation/cubit/favorites_cubit.dart';
@@ -12,12 +14,14 @@ import 'package:news_api_project/presentation/widgets/article_card.dart';
 class FavoritesPage extends StatelessWidget {
   const FavoritesPage({super.key});
 
+  static const double _toolbarHeight = 50;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         scrolledUnderElevation: 0,
-        toolbarHeight: 50,
+        toolbarHeight: _toolbarHeight,
       ),
       body: BlocBuilder<FavoritesCubit, FavoritesState>(
         builder: (context, state) {
@@ -25,8 +29,10 @@ class FavoritesPage extends StatelessWidget {
             initial: () => const SizedBox.shrink(),
             loading: () => const Center(child: CircularProgressIndicator()),
             loaded: (favorites) =>
-                favorites.isEmpty ? const _EmptyFavoritesView() : _FavoritesList(favorites: favorites),
-            error: (failure) => Center(child: Text(failure.message)),
+                favorites.isEmpty ? _EmptyFavoritesView() : _FavoritesList(favorites: favorites),
+            error: (failure) => Center(
+              child: Text(failure.localizedMessage(context.l10n)),
+            ),
           );
         },
       ),
@@ -51,19 +57,15 @@ class _FavoritesList extends StatelessWidget {
       separatorBuilder: (context, index) => const SizedBox(height: _cardSpacing),
       itemBuilder: (context, index) {
         final article = favorites[index];
-        return BlocBuilder<FavoritesCubit, FavoritesState>(
-          builder: (context, state) {
-            final isFav = context.read<FavoritesCubit>().isFavorite(article);
-            return ArticleCard(
-              title: article.title,
-              subtitle: article.subtitle,
-              date: _dateFormat.format(article.publishedAt),
-              imageUrl: article.imgUrl,
-              isFavorite: isFav,
-              onFavoriteToggle: () => context.read<FavoritesCubit>().toggle(article),
-              onTap: () => context.router.push(ArticleDetailsRoute(article: article)),
-            );
-          },
+        return ArticleCard(
+          key: ValueKey(article.title),
+          title: article.title,
+          subtitle: article.subtitle,
+          date: _dateFormat.format(article.publishedAt),
+          imageUrl: article.imgUrl,
+          isFavorite: true,
+          onFavoriteToggle: () => context.read<FavoritesCubit>().toggle(article),
+          onTap: () => context.router.push(ArticleDetailsRoute(article: article)),
         );
       },
     );
@@ -71,17 +73,17 @@ class _FavoritesList extends StatelessWidget {
 }
 
 class _EmptyFavoritesView extends StatelessWidget {
-  const _EmptyFavoritesView();
+  static const double _iconSize = 64;
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
+    return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Icons.star_border_rounded, size: 64),
-          SizedBox(height: 16),
-          Text('No favorites yet'),
+          const Icon(Icons.star_border_rounded, size: _iconSize),
+          const SizedBox(height: 16),
+          Text(context.l10n.noFavoritesYet),
         ],
       ),
     );

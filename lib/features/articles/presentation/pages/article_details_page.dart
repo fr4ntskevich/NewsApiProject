@@ -9,6 +9,7 @@ import 'package:news_api_project/features/favorites/presentation/cubit/favorites
 import 'package:news_api_project/features/favorites/presentation/cubit/favorites_state.dart';
 import 'package:news_api_project/presentation/theme/app_fonts.dart';
 import 'package:news_api_project/presentation/theme/app_icons.dart';
+import 'package:news_api_project/presentation/theme/app_shadows.dart';
 import 'package:news_api_project/presentation/theme/utils/colors_utils.dart';
 
 @RoutePage()
@@ -19,9 +20,8 @@ class ArticleDetailsPage extends StatelessWidget {
 
   static const double _sidePadding = 16;
   static const double _imageBorderRadius = 27;
+  static const double _errorWidgetHight = 200;
   static final _dateFormat = DateFormat('dd.MM.yyyy');
-  static const Offset _shadowOffset = Offset(0, 3);
-  static const double _shadowBlurRadius = 6.1;
 
   @override
   Widget build(BuildContext context) {
@@ -33,9 +33,9 @@ class ArticleDetailsPage extends StatelessWidget {
           icon: SvgPicture.asset(AppIcons.arrowBack),
         ),
         actions: [
-          BlocBuilder<FavoritesCubit, FavoritesState>(
-            builder: (context, state) {
-              final isFavorite = context.read<FavoritesCubit>().isFavorite(article);
+          BlocSelector<FavoritesCubit, FavoritesState, bool>(
+            selector: (state) => context.read<FavoritesCubit>().isFavorite(article),
+            builder: (context, isFavorite) {
               return IconButton(
                 padding: const EdgeInsets.only(right: _sidePadding),
                 splashColor: Colors.transparent,
@@ -83,11 +83,7 @@ class ArticleDetailsPage extends StatelessWidget {
               Container(
                 decoration: BoxDecoration(
                   boxShadow: [
-                    BoxShadow(
-                      color: context.colors.shadow,
-                      offset: _shadowOffset,
-                      blurRadius: _shadowBlurRadius,
-                    ),
+                    AppShadows.card(context.colors.shadow),
                   ],
                   borderRadius: BorderRadius.circular(_imageBorderRadius),
                 ),
@@ -101,6 +97,7 @@ class ArticleDetailsPage extends StatelessWidget {
                       ),
                     ),
                     errorWidget: (context, url, error) => const SizedBox(
+                      height: _errorWidgetHight,
                       child: Center(
                         child: Icon(Icons.broken_image_outlined),
                       ),
